@@ -11,10 +11,10 @@
       background-color: #f2f2f2;
       text-align: center;
     }
-    select, button {
-      font-size: 1.2rem;
+    select, button, input {
+      font-size: 1.1rem;
       padding: 0.5rem;
-      margin: 1rem;
+      margin: 0.5rem;
     }
     #youtubePlayer {
       position: fixed;
@@ -24,14 +24,34 @@
       height: 140px;
       border: none;
     }
+    .section {
+      margin-top: 2rem;
+    }
   </style>
 </head>
 <body>
-  <h1>🧘‍♂️ もくもくタイム - 忍者の集中術</h1><label for="bgmSelect">🎵 BGMを選ぶ：</label> <select id="bgmSelect"> <option value="lofi">Lo-fi｜雨とピアノ</option> <option value="piano">ピアノ｜静かな朝</option> <option value="nature">自然音｜川の音</option> <option value="focus">集中ビート｜ハイテンポ</option> <option value="zen">禅｜和の瞑想空間</option> <option value="none">音なし</option> </select>
-
-  <br />
-  <button onclick="startFocus()">▶️ もくもく開始</button>
-  <button onclick="stopFocus()">⏹️ 中止</button>  <p id="status">🔕 中止中です</p>  <iframe id="youtubePlayer" src="about:blank" allow="autoplay"></iframe>  <script>
+  <h1>🧘‍♂️ もくもくタイム - 忍者の集中術</h1>  <div class="section">
+    <label for="bgmSelect">🎵 BGMを選ぶ：</label>
+    <select id="bgmSelect">
+      <option value="lofi">Lo-fi｜雨とピアノ</option>
+      <option value="piano">ピアノ｜静かな朝</option>
+      <option value="nature">自然音｜川の音</option>
+      <option value="focus">集中ビート｜ハイテンポ</option>
+      <option value="zen">禅｜和の瞑想空間</option>
+      <option value="none">音なし</option>
+    </select>
+  </div>  <div class="section">
+    <label>集中時間（分）：<input type="number" id="focusTime" value="25" min="1" /></label>
+    <label>休憩時間（分）：<input type="number" id="breakTime" value="5" min="1" /></label>
+    <label>セット数：<input type="number" id="sets" value="4" min="1" /></label>
+  </div>  <div class="section">
+    <button onclick="startTimer()">▶️ 開始</button>
+    <button onclick="stopTimer()">⏹️ 中止</button>
+  </div>  <div class="section">
+    <p id="status">🔕 中止中です</p>
+    <p id="countdown">⏳</p>
+    <p id="setInfo"></p>
+  </div>  <iframe id="youtubePlayer" src="about:blank" allow="autoplay"></iframe>  <script>
     const bgmUrls = {
       lofi: "https://www.youtube.com/embed/jq6kDvXYFb4?autoplay=1&loop=1&playlist=jq6kDvXYFb4",
       piano: "https://www.youtube.com/embed/2OEL4P1Rz04?autoplay=1&loop=1&playlist=2OEL4P1Rz04",
@@ -42,6 +62,10 @@
     };
 
     let running = false;
+    let timer;
+    let currentSet = 0;
+    let isFocus = true;
+    let remaining = 0;
 
     document.getElementById("bgmSelect").addEventListener("change", () => {
       if (running) updateBGM();
@@ -52,15 +76,67 @@
       document.getElementById("youtubePlayer").src = bgmUrls[bgm] || "about:blank";
     }
 
-    function startFocus() {
+    function startTimer() {
+      if (running) return;
       running = true;
-      document.getElementById("status").textContent = "🧘‍♂️ 集中モード中... 忍の術、発動！";
+      currentSet = 1;
+      isFocus = true;
       updateBGM();
+      runSession();
     }
 
-    function stopFocus() {
+    function runSession() {
+      const focusMin = parseInt(document.getElementById("focusTime").value);
+      const breakMin = parseInt(document.getElementById("breakTime").value);
+      const totalSets = parseInt(document.getElementById("sets").value);
+
+      if (currentSet > totalSets) {
+        document.getElementById("status").textContent = "🎉 完了！お疲れさまでした！";
+        document.getElementById("countdown").textContent = "";
+        document.getElementById("setInfo").textContent = "";
+        stopBGM();
+        running = false;
+        return;
+      }
+
+      if (isFocus) {
+        document.getElementById("status").textContent = `🧘‍♂️ セット ${currentSet}：集中モード！`;
+        remaining = focusMin * 60;
+      } else {
+        document.getElementById("status").textContent = `☕ セット ${currentSet}：休憩タイム`;
+        remaining = breakMin * 60;
+      }
+
+      updateCountdown();
+      timer = setInterval(() => {
+        remaining--;
+        updateCountdown();
+        if (remaining <= 0) {
+          clearInterval(timer);
+          if (!isFocus) currentSet++;
+          isFocus = !isFocus;
+          runSession();
+        }
+      }, 1000);
+    }
+
+    function updateCountdown() {
+      const min = Math.floor(remaining / 60).toString().padStart(2, '0');
+      const sec = (remaining % 60).toString().padStart(2, '0');
+      document.getElementById("countdown").textContent = `残り ${min}:${sec}`;
+      document.getElementById("setInfo").textContent = `進行中のセット：${currentSet}`;
+    }
+
+    function stopTimer() {
       running = false;
+      clearInterval(timer);
       document.getElementById("status").textContent = "🔕 中止中です";
+      document.getElementById("countdown").textContent = "";
+      document.getElementById("setInfo").textContent = "";
+      stopBGM();
+    }
+
+    function stopBGM() {
       document.getElementById("youtubePlayer").src = "about:blank";
     }
   </script></body>
