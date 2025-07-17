@@ -1,212 +1,67 @@
-<!DOCTYPE html>
-<html lang="ja">
+<!DOCTYPE html><html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>もくもくタイム</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>もくもくタイム ⏳</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
       font-family: sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background-color: #f2f2f2;
       text-align: center;
-      background-color: #d0f0ff;
-      transition: background-color 1s;
     }
-    h1 {
-      margin-top: 1.5rem;
-      font-size: 2rem;
-    }
-    #pomotip {
-      font-size: 0.95rem;
-      color: #333;
-      margin: 0.5rem 1rem;
-      line-height: 1.6;
-    }
-    #status, #next, #setCount {
-      margin: 0.3rem;
-      font-size: 1rem;
-    }
-    #timer {
-      font-size: 4rem;
-      margin: 1rem 0;
-    }
-    #message {
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-    }
-    .buttons {
-      margin-bottom: 1rem;
-    }
-    button {
-      padding: 0.8rem 1.5rem;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 10px;
-      background-color: #007bff;
-      color: white;
-      cursor: pointer;
-      margin: 0.5rem;
-    }
-    button:disabled {
-      background-color: #999;
-    }
-    .bgm-select {
-      margin: 1rem 0;
-      font-size: 1rem;
-    }
-    select {
+    select, button {
+      font-size: 1.2rem;
       padding: 0.5rem;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: 1px solid #aaa;
-      margin-top: 0.5rem;
+      margin: 1rem;
     }
-    #bgmContainer {
+    #youtubePlayer {
       position: fixed;
       bottom: 10px;
       right: 10px;
-      width: 150px;
-      height: 80px;
-      z-index: 999;
-    }
-    #bgmContainer iframe {
-      width: 100%;
-      height: 100%;
+      width: 250px;
+      height: 140px;
       border: none;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.3);
     }
   </style>
 </head>
 <body>
-  <h1>もくもくタイム</h1>
-  <p id="pomotip">
-    ⏳ <strong>集中の術（ポモドーロ）</strong><br>
-    25分間、全集中。<br>
-    5分間、気を整える。<br>
-    これをくり返し、力を高めるのでござる。
-  </p>
+  <h1>🧘‍♂️ もくもくタイム - 忍者の集中術</h1><label for="bgmSelect">🎵 BGMを選ぶ：</label> <select id="bgmSelect"> <option value="lofi">Lo-fi｜雨とピアノ</option> <option value="piano">ピアノ｜静かな朝</option> <option value="nature">自然音｜川の音</option> <option value="focus">集中ビート｜ハイテンポ</option> <option value="zen">禅｜和の瞑想空間</option> <option value="none">音なし</option> </select>
 
-  <div id="status">状態：作業モード</div>
-  <div id="setCount">セット数：0</div>
-  <div id="next">次は：5分休憩</div>
-  <div id="timer">25:00</div>
-  <div id="message">集中して取り組もう！</div>
-
-  <div class="bgm-select">
-    🎵 BGMを選ぼう：<br>
-    <select id="bgmSelect">
-      <option value="lofi">Lo-fi</option>
-      <option value="piano">ピアノ</option>
-      <option value="nature">自然音</option>
-      <option value="none">音なし</option>
-    </select>
-  </div>
-
-  <div class="buttons">
-    <button id="startBtn">スタート</button>
-    <button id="stopBtn" disabled>中止</button>
-  </div>
-
-  <div id="bgmContainer">
-    <iframe id="bgmPlayer" src="" allow="autoplay"></iframe>
-  </div>
-
-  <script>
-    const workDuration = 25 * 60;
-    const breakDuration = 5 * 60;
-    let isWork = true;
-    let timeLeft = workDuration;
-    let interval = null;
-    let setCount = 0;
-    let isRunning = false;
-
-    const timerEl = document.getElementById("timer");
-    const messageEl = document.getElementById("message");
-    const statusEl = document.getElementById("status");
-    const nextEl = document.getElementById("next");
-    const setCountEl = document.getElementById("setCount");
-    const startBtn = document.getElementById("startBtn");
-    const stopBtn = document.getElementById("stopBtn");
-    const bgmPlayer = document.getElementById("bgmPlayer");
-    const bgmSelect = document.getElementById("bgmSelect");
-
+  <br />
+  <button onclick="startFocus()">▶️ もくもく開始</button>
+  <button onclick="stopFocus()">⏹️ 中止</button>  <p id="status">🔕 中止中です</p>  <iframe id="youtubePlayer" src="about:blank" allow="autoplay"></iframe>  <script>
     const bgmUrls = {
       lofi: "https://www.youtube.com/embed/jq6kDvXYFb4?autoplay=1&loop=1&playlist=jq6kDvXYFb4",
       piano: "https://www.youtube.com/embed/2OEL4P1Rz04?autoplay=1&loop=1&playlist=2OEL4P1Rz04",
       nature: "https://www.youtube.com/embed/1ZYbU82GVz4?autoplay=1&loop=1&playlist=1ZYbU82GVz4",
+      focus: "https://www.youtube.com/embed/5qap5aO4i9A?autoplay=1&loop=1&playlist=5qap5aO4i9A",
+      zen: "https://www.youtube.com/embed/qrx1vyvtRLY?autoplay=1&loop=1&playlist=qrx1vyvtRLY",
       none: "about:blank"
     };
 
-    function updateTimerDisplay() {
-      const minutes = Math.floor(timeLeft / 60).toString().padStart(2, "0");
-      const seconds = (timeLeft % 60).toString().padStart(2, "0");
-      timerEl.textContent = `${minutes}:${seconds}`;
-    }
+    let running = false;
 
-    function updateUI() {
-      statusEl.textContent = `状態：${isWork ? "作業モード" : "休憩モード"}`;
-      setCountEl.textContent = `セット数：${setCount}`;
-      nextEl.textContent = `次は：${isWork ? "5分休憩" : "25分作業"}`;
-      messageEl.textContent = isWork
-        ? "集中して取り組もう！"
-        : "おつかれさま！ちょっと休もう";
-      document.body.style.backgroundColor = isWork ? "#d0f0ff" : "#d0ffd0";
-    }
+    document.getElementById("bgmSelect").addEventListener("change", () => {
+      if (running) updateBGM();
+    });
 
     function updateBGM() {
-      const selected = bgmSelect.value;
-      bgmPlayer.src = bgmUrls[selected] || bgmUrls.none;
+      const bgm = document.getElementById("bgmSelect").value;
+      document.getElementById("youtubePlayer").src = bgmUrls[bgm] || "about:blank";
     }
 
-    function switchMode() {
-      isWork = !isWork;
-      timeLeft = isWork ? workDuration : breakDuration;
-      if (isWork) setCount++;
-      updateUI();
-      updateTimerDisplay();
-    }
-
-    function tick() {
-      if (timeLeft > 0) {
-        timeLeft--;
-        updateTimerDisplay();
-      } else {
-        switchMode();
-      }
-    }
-
-    startBtn.addEventListener("click", () => {
-      startBtn.disabled = true;
-      stopBtn.disabled = false;
-      isRunning = true;
-      setCount = 0;
-      isWork = true;
-      timeLeft = workDuration;
-      updateUI();
-      updateTimerDisplay();
+    function startFocus() {
+      running = true;
+      document.getElementById("status").textContent = "🧘‍♂️ 集中モード中... 忍の術、発動！";
       updateBGM();
-      interval = setInterval(tick, 1000);
-    });
+    }
 
-    stopBtn.addEventListener("click", () => {
-      clearInterval(interval);
-      interval = null;
-      isRunning = false;
-      startBtn.disabled = false;
-      stopBtn.disabled = true;
-      bgmPlayer.src = "about:blank";
-      isWork = true;
-      timeLeft = workDuration;
-      setCount = 0;
-      updateUI();
-      updateTimerDisplay();
-    });
-
-    bgmSelect.addEventListener("change", () => {
-      if (isRunning) updateBGM(); // スタート中のみ反映
-    });
-  </script>
-</body>
+    function stopFocus() {
+      running = false;
+      document.getElementById("status").textContent = "🔕 中止中です";
+      document.getElementById("youtubePlayer").src = "about:blank";
+    }
+  </script></body>
 </html>
