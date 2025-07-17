@@ -79,7 +79,8 @@
   </div>  <div class="section">
     <button onclick="startTimer()">スタート</button>
     <button onclick="stopTimer()">中止</button>
-  </div>  <iframe id="youtubePlayer" src="about:blank" allow="autoplay"></iframe>  <div id="x-link">
+  </div>  <iframe id="youtubePlayer" src="about:blank" allow="autoplay"></iframe>
+  <audio id="alertSound" src="https://soundeffect-lab.info/sound/voice/mp3/pon1.mp3" preload="auto"></audio>  <div id="x-link">
     🧘‍♂️ 忍者のつぶやき → <a href="https://x.com/kkp_webninja" target="_blank">@kkp_webninja</a>
   </div>  <script>
     const bgmUrls = {
@@ -98,12 +99,18 @@
     let remaining = 0;
 
     document.getElementById("bgmSelect").addEventListener("change", () => {
-      if (running) updateBGM();
+      if (running && isFocus) updateBGM();
     });
 
     function updateBGM() {
       const bgm = document.getElementById("bgmSelect").value;
       document.getElementById("youtubePlayer").src = bgmUrls[bgm] || "about:blank";
+    }
+
+    function playAlert() {
+      const alert = document.getElementById("alertSound");
+      alert.currentTime = 0;
+      alert.play();
     }
 
     function startTimer() {
@@ -116,8 +123,8 @@
     }
 
     function runSession() {
-      const focusMin = 25;
-      const breakMin = 5;
+      const focusMin = 1;
+      const breakMin = 0.5;
       const totalSets = 4;
 
       if (currentSet > totalSets) {
@@ -130,13 +137,17 @@
         return;
       }
 
+      playAlert();
+
       if (isFocus) {
-        document.getElementById("status").textContent = `状態：作業モード`;
+        document.getElementById("status").textContent = "🛠 作業スタート！全集中せよ！";
         document.getElementById("next").textContent = `次は：${breakMin}分休憩`;
+        updateBGM();
         remaining = focusMin * 60;
       } else {
-        document.getElementById("status").textContent = `状態：休憩モード`;
+        document.getElementById("status").textContent = "🍵 休憩スタート！一息つくでござる";
         document.getElementById("next").textContent = `次は：${focusMin}分作業`;
+        stopBGM();
         remaining = breakMin * 60;
       }
 
