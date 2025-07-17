@@ -55,6 +55,13 @@
       margin: 1rem 0;
       font-size: 1rem;
     }
+    select {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #aaa;
+      margin-top: 0.5rem;
+    }
     #bgmContainer {
       position: fixed;
       bottom: 10px;
@@ -89,10 +96,12 @@
 
   <div class="bgm-select">
     🎵 BGMを選ぼう：<br>
-    <label><input type="radio" name="bgm" value="lofi" checked> Lo-fi</label>
-    <label><input type="radio" name="bgm" value="piano"> ピアノ</label>
-    <label><input type="radio" name="bgm" value="nature"> 自然音</label>
-    <label><input type="radio" name="bgm" value="none"> 音なし</label>
+    <select id="bgmSelect">
+      <option value="lofi">Lo-fi</option>
+      <option value="piano">ピアノ</option>
+      <option value="nature">自然音</option>
+      <option value="none">音なし</option>
+    </select>
   </div>
 
   <div class="buttons">
@@ -111,6 +120,7 @@
     let timeLeft = workDuration;
     let interval = null;
     let setCount = 0;
+    let isRunning = false;
 
     const timerEl = document.getElementById("timer");
     const messageEl = document.getElementById("message");
@@ -120,6 +130,7 @@
     const startBtn = document.getElementById("startBtn");
     const stopBtn = document.getElementById("stopBtn");
     const bgmPlayer = document.getElementById("bgmPlayer");
+    const bgmSelect = document.getElementById("bgmSelect");
 
     const bgmUrls = {
       lofi: "https://www.youtube.com/embed/jq6kDvXYFb4?autoplay=1&loop=1&playlist=jq6kDvXYFb4",
@@ -145,7 +156,7 @@
     }
 
     function updateBGM() {
-      const selected = document.querySelector('input[name="bgm"]:checked').value;
+      const selected = bgmSelect.value;
       bgmPlayer.src = bgmUrls[selected] || bgmUrls.none;
     }
 
@@ -169,6 +180,7 @@
     startBtn.addEventListener("click", () => {
       startBtn.disabled = true;
       stopBtn.disabled = false;
+      isRunning = true;
       setCount = 0;
       isWork = true;
       timeLeft = workDuration;
@@ -181,6 +193,7 @@
     stopBtn.addEventListener("click", () => {
       clearInterval(interval);
       interval = null;
+      isRunning = false;
       startBtn.disabled = false;
       stopBtn.disabled = true;
       bgmPlayer.src = "about:blank";
@@ -189,6 +202,10 @@
       setCount = 0;
       updateUI();
       updateTimerDisplay();
+    });
+
+    bgmSelect.addEventListener("change", () => {
+      if (isRunning) updateBGM(); // スタート中のみ反映
     });
   </script>
 </body>
