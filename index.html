@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>もくもくタイム</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #d0f0ff;
+      transition: background-color 1s;
+    }
+    h1 {
+      margin-top: 2rem;
+      font-size: 2rem;
+    }
+    #timer {
+      font-size: 5rem;
+      margin: 2rem 0;
+    }
+    #message {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #999;
+    }
+  </style>
+</head>
+<body>
+  <h1>もくもくタイム</h1>
+  <div id="timer">25:00</div>
+  <div id="message">作業モード</div>
+  <button id="startBtn">スタート</button>
+
+  <script>
+    const workDuration = 25 * 60; // 25分
+    const breakDuration = 5 * 60; // 5分
+    let isWork = true;
+    let timeLeft = workDuration;
+    let interval = null;
+
+    const timerEl = document.getElementById("timer");
+    const messageEl = document.getElementById("message");
+    const startBtn = document.getElementById("startBtn");
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60).toString().padStart(2, "0");
+      const seconds = (timeLeft % 60).toString().padStart(2, "0");
+      timerEl.textContent = `${minutes}:${seconds}`;
+    }
+
+    function switchMode() {
+      isWork = !isWork;
+      timeLeft = isWork ? workDuration : breakDuration;
+      document.body.style.backgroundColor = isWork ? "#d0f0ff" : "#d0ffd0";
+      messageEl.textContent = isWork ? "作業モード" : "休憩モード";
+      updateTimerDisplay();
+    }
+
+    function tick() {
+      if (timeLeft > 0) {
+        timeLeft--;
+        updateTimerDisplay();
+      } else {
+        switchMode();
+      }
+    }
+
+    startBtn.addEventListener("click", () => {
+      startBtn.disabled = true;
+      updateTimerDisplay();
+      interval = setInterval(tick, 1000);
+    });
+  </script>
+</body>
+</html>
