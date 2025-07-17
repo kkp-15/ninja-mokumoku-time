@@ -54,12 +54,12 @@
   </style>
 </head>
 <body>
-  <h1>🧘‍♂️ もくもくタイム</h1>
+  <h1>もくもくタイム</h1>
   <div class="description">
-    ⏳ 集中の術（ポモドーロ）<br>
+    集中（ポモドーロ）<br>
     25分間、全集中。<br>
     5分間、気を整える。<br>
-    これをくり返し、力を高めるのでござる。
+    これをくり返し、力を高めよう。
   </div>  <div id="infoArea">
     <p id="status">状態：待機中</p>
     <p id="setInfo">セット数：0</p>
@@ -81,7 +81,7 @@
     <button onclick="stopTimer()">中止</button>
   </div>  <iframe id="youtubePlayer" src="about:blank" allow="autoplay"></iframe>
   <audio id="alertSound" src="https://soundeffect-lab.info/sound/voice/mp3/pon1.mp3" preload="auto"></audio>  <div id="x-link">
-    🧘‍♂️ 忍者のつぶやき → <a href="https://x.com/kkp_webninja" target="_blank">@kkp_webninja</a>
+     <a href="https://x.com/kkp_webninja" target="_blank">@kkp_webninja</a>
   </div>  <script>
     const bgmUrls = {
       lofi: "https://www.youtube.com/embed/jq6kDvXYFb4?autoplay=1&loop=1&playlist=jq6kDvXYFb4",
@@ -138,6 +138,9 @@
       }
 
       playAlert();
+  if ("vibrate" in navigator) {
+    navigator.vibrate([200, 100, 200]);
+  }
 
       if (isFocus) {
         document.getElementById("status").textContent = "🛠 作業スタート！全集中せよ！";
