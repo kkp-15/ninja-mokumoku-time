@@ -17,6 +17,12 @@
       margin-top: 1.5rem;
       font-size: 2rem;
     }
+    #pomotip {
+      font-size: 0.95rem;
+      color: #333;
+      margin: 0.5rem 1rem;
+      line-height: 1.6;
+    }
     #status, #next, #setCount {
       margin: 0.3rem;
       font-size: 1rem;
@@ -49,7 +55,6 @@
       margin: 1rem 0;
       font-size: 1rem;
     }
-    /* 🎵 BGMプレイヤーの右下配置 */
     #bgmContainer {
       position: fixed;
       bottom: 10px;
@@ -69,6 +74,13 @@
 </head>
 <body>
   <h1>もくもくタイム</h1>
+  <p id="pomotip">
+    ⏳ <strong>集中の術（ポモドーロ）</strong><br>
+    25分間、全集中。<br>
+    5分間、気を整える。<br>
+    これをくり返し、力を高めるのでござる。
+  </p>
+
   <div id="status">状態：作業モード</div>
   <div id="setCount">セット数：0</div>
   <div id="next">次は：5分休憩</div>
@@ -88,7 +100,6 @@
     <button id="stopBtn" disabled>中止</button>
   </div>
 
-  <!-- 🎧 YouTube BGMプレイヤー -->
   <div id="bgmContainer">
     <iframe id="bgmPlayer" src="" allow="autoplay"></iframe>
   </div>
