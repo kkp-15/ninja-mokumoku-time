@@ -1,20 +1,13 @@
-<!DOCTYPE html>
-<html lang="ja">
+<!DOCTYPE html><html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>もくもくタイム ⏳</title>
-
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2LM85GJN0L"></script>
-  <script>
+  <title>もくもくタイム ⏳</title>  <!-- Google Analytics -->  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2LM85GJN0L"></script>  <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-2LM85GJN0L');
-  </script>
-
-  <style>
+  </script>  <style>
     body {
       font-family: "Hiragino Kaku Gothic ProN", sans-serif;
       margin: 0;
@@ -62,8 +55,7 @@
       color: #1da1f2;
       text-decoration: none;
     }
-  </style>
-</head>
+  </style></head>
 <body>
   <h1>もくもくタイム</h1>
   <div class="description">
@@ -71,20 +63,12 @@
     25分間、全集中。<br>
     5分間、気を整える。<br>
     これをくり返し、力を高めよう。
-  </div>
-
-  <div id="infoArea">
+  </div>  <div id="infoArea">
     <p id="status">状態：待機中</p>
     <p id="setInfo">セット数：0 / 4</p>
     <p id="next">次は：5分休憩</p>
-  </div>
-
-  <div id="countdown">25:00</div>
-  <p>集中して取り組もう！</p>
-
-  <iframe id="youtubePlayer" src="about:blank" allow="autoplay"></iframe>
-
-  <div class="section">
+  </div>  <div id="countdown">25:00</div>
+  <p>集中して取り組もう！</p>  <iframe id="youtubePlayer" src="about:blank" allow="autoplay"></iframe>  <div class="section">
     <label>🎵 BGMを選ぼう：
       <select id="bgmSelect">
         <option value="bgm1">作業用BGM 1</option>
@@ -93,23 +77,18 @@
         <option value="bgm4">作業用BGM 4</option>
         <option value="bgm5">作業用BGM 5</option>
         <option value="bgm6">作業用BGM 6</option>
+        <option value="bgm7">作業用BGM 7</option>
         <option value="none">音なし</option>
       </select>
     </label>
-  </div>
-
-  <div class="section">
+  </div>  <div class="section">
     <button onclick="startTimer()">スタート</button>
     <button onclick="stopTimer()">中止</button>
-  </div>
-
-  <audio id="alertSound" src="https://soundeffect-lab.info/sound/voice/mp3/pon1.mp3" preload="auto"></audio>
+  </div><audio id="alertSound" src="https://soundeffect-lab.info/sound/voice/mp3/pon1.mp3" preload="auto"></audio>
 
   <div id="x-link">
     <a href="https://x.com/kkp_webninja" target="_blank">@kkp_webninja</a>
-  </div>
-
-  <script>
+  </div>  <script>
     const bgmUrls = {
       bgm1: "https://www.youtube.com/embed/lY3x33Q9p7Y?autoplay=1&loop=1&playlist=lY3x33Q9p7Y",
       bgm2: "https://www.youtube.com/embed/yYUGuth8cpE?autoplay=1&loop=1&playlist=yYUGuth8cpE",
@@ -117,6 +96,7 @@
       bgm4: "https://www.youtube.com/embed/CMupnAnOotQ?autoplay=1&loop=1&playlist=CMupnAnOotQ",
       bgm5: "https://www.youtube.com/embed/ePvoW8HRTNI?autoplay=1&loop=1&playlist=ePvoW8HRTNI",
       bgm6: "https://www.youtube.com/embed/tOKArkTnpZc?autoplay=1&loop=1&playlist=tOKArkTnpZc",
+      bgm7: "https://www.youtube.com/embed/AzIR1XYWoTI?autoplay=1&loop=1&playlist=AzIR1XYWoTI",
       none: "about:blank"
     };
 
@@ -215,6 +195,5 @@
     function stopBGM() {
       document.getElementById("youtubePlayer").src = "about:blank";
     }
-  </script>
-</body>
+  </script></body>
 </html>
